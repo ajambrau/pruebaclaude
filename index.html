@@ -11,7 +11,9 @@
                box-shadow: 0 4px 20px rgba(0,0,0,.08); max-width: 360px; }
     button { font-size: 18px; padding: 10px 20px; border: 0; border-radius: 8px;
              background: #2f6fde; color: #fff; cursor: pointer; }
+    body { transition: background .4s; }
     #contador { font-size: 48px; margin: 16px 0; }
+    #mensaje { min-height: 1.5em; font-weight: bold; margin-top: 16px; }
   </style>
 </head>
 <body>
@@ -19,7 +21,19 @@
     <h1>¡Hola! 👋</h1>
     <p>Esta es mi primera web, hecha en una rama y unida con un Pull Request.</p>
     <div id="contador">0</div>
-    <button onclick="document.getElementById('contador').textContent++">Púlsame</button>
+    <button onclick="pulsar()">Púlsame</button>
+    <div id="mensaje"></div>
   </div>
+  <script>
+    const colores = ['#f4f1ea', '#ffe3e3', '#e3f2ff', '#e6ffe3', '#fff6d6', '#f0e3ff'];
+    let clics = 0;
+    function pulsar() {
+      clics++;
+      document.getElementById('contador').textContent = clics;
+      document.body.style.background = colores[clics % colores.length];
+      if (clics === 10) document.getElementById('mensaje').textContent = '🏆 ¡10 clics! ¡Eres un crack!';
+      if (clics === 50) document.getElementById('mensaje').textContent = '🚀 ¡50 clics! ¿No te cansas?';
+    }
+  </script>
 </body>
 </html>
