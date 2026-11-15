@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Mi primera web</title>
+  <style>
+    body { font-family: system-ui, sans-serif; background: #f4f1ea; color: #222;
+           display: grid; place-items: center; min-height: 100vh; margin: 0; padding: 16px; }
+    .tarjeta { background: #fff; padding: 32px; border-radius: 16px; text-align: center;
+               box-shadow: 0 4px 20px rgba(0,0,0,.08); max-width: 360px; }
+    button { font-size: 18px; padding: 10px 20px; border: 0; border-radius: 8px;
+             background: #2f6fde; color: #fff; cursor: pointer; }
+    #contador { font-size: 48px; margin: 16px 0; }
+  </style>
+</head>
+<body>
+  <div class="tarjeta">
+    <h1>¡Hola! 👋</h1>
+    <p>Esta es mi primera web, hecha en una rama y unida con un Pull Request.</p>
+    <div id="contador">0</div>
+    <button onclick="document.getElementById('contador').textContent++">Púlsame</button>
+  </div>
+</body>
+</html>
