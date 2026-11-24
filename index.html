@@ -75,7 +75,7 @@
     .rejilla.tres { grid-template-columns: repeat(3, 1fr); }
     .rejilla.una { grid-template-columns: 1fr; }
     @media (min-width: 640px) {
-      .rejilla:not(.una):not(.tres) { grid-template-columns: repeat(4, 1fr); }
+      .rejilla:not(.una):not(.tres) { grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); }
       .rejilla.tres .periodico { aspect-ratio: 16 / 9; }
     }
 
@@ -93,6 +93,8 @@
       transition: transform .18s ease, box-shadow .18s ease;
     }
     .rejilla.una .periodico { aspect-ratio: auto; min-height: 120px; }
+    /* Si en una rejilla de 2 queda una tarjeta sola al final, ocupa todo el ancho */
+    .rejilla:not(.una):not(.tres) .periodico:last-child:nth-child(odd) { grid-column: 1 / -1; aspect-ratio: auto; min-height: 120px; }
     .periodico:hover { transform: translateY(-3px); box-shadow: 0 2px 4px rgba(0,0,0,.12), 0 14px 30px -10px var(--color); }
     .periodico:active { transform: scale(.97); }
     .periodico:focus-visible { outline: 3px solid var(--tinta); outline-offset: 3px; }
@@ -131,6 +133,12 @@
     }
     .rejilla.tres .flecha { width: 24px; height: 24px; font-size: 12px; }
 
+    /* Ordenador: todas las tarjetas de una sección en una sola fila */
+    @media (min-width: 640px) {
+      .rejilla:not(.una):not(.tres) .periodico:last-child:nth-child(odd) { grid-column: auto; aspect-ratio: 1 / 1; min-height: 0; }
+      .rejilla:not(.una):not(.tres) .nombre { font-size: 22px; overflow-wrap: normal; }
+    }
+
     footer { margin-top: 40px; text-align: center; font-size: 12px; color: var(--tinta-suave); }
   </style>
 </head>
@@ -160,12 +168,14 @@
           { nombre: 'El Mundo',    url: 'https://www.elmundo.es',  color: '#1d4e89', estilo: 'italic', logo: 'logos/elmundo.png' },
           { nombre: 'elDiario.es', url: 'https://www.eldiario.es', color: '#0e7c86', estilo: 'sans',   logo: 'logos/eldiario.png' },
           { nombre: 'La Marea',    url: 'https://www.lamarea.com', color: '#2f7ea6', estilo: 'serif',  logo: 'logos/lamarea.jpg' },
+          { nombre: 'Público',     url: 'https://www.publico.es', color: '#b5123b', estilo: 'serif',  logo: 'logos/publico.png' },
         ],
       },
       {
-        titulo: 'Cantabria', columnas: 1,
+        titulo: 'Regionales', columnas: 1,
         periodicos: [
-          { nombre: 'El Diario Montañés', url: 'https://www.eldiariomontanes.es', color: '#123a6b', estilo: 'serif', logo: 'logos/eldiariomontanes.png' },
+          { nombre: 'El Diario Montañés', url: 'https://www.eldiariomontanes.es', color: '#123a6b', estilo: 'serif', logo: 'logos/eldiariomontanes.png', zona: 'Cantabria' },
+          { nombre: 'Hoy', url: 'https://www.hoy.es', color: '#c4002b', estilo: 'serif', logo: 'logos/hoy.png', zona: 'Extremadura' },
         ],
       },
       {
@@ -210,7 +220,8 @@
         if (p.logo) a.querySelector('.logo img').src = p.logo;
         else a.querySelector('.logo').remove();
         a.querySelector('.nombre').textContent = p.nombre;
-        a.querySelector('.web').textContent = new URL(p.url).hostname.replace(/^www\./, '');
+        a.querySelector('.web').textContent =
+          new URL(p.url).hostname.replace(/^www\./, '') + (p.zona ? ' · ' + p.zona : '');
         rejilla.append(a);
       }
       section.append(h2, rejilla);
