@@ -1,6 +1,6 @@
 // Service worker: guarda la página para que el kiosko abra rápido y funcione sin conexión.
 // Cambia el número de versión cuando modifiques los archivos, para que se actualicen.
-const CACHE = 'kiosko-v4';
+const CACHE = 'kiosko-v5';
 const ARCHIVOS = ['./', 'index.html', 'manifest.json', 'icono.svg', 'icono-192.png', 'icono-512.png'];
 
 self.addEventListener('install', (e) => {

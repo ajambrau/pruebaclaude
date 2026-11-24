@@ -139,7 +139,12 @@
       .rejilla:not(.una):not(.tres) .nombre { font-size: 22px; overflow-wrap: normal; }
     }
 
-    footer { margin-top: 40px; text-align: center; font-size: 12px; color: var(--tinta-suave); }
+    footer {
+      margin-top: 44px; padding-top: 18px; border-top: 1px solid var(--raya);
+      text-align: center; font-size: 12px; color: var(--tinta-suave);
+    }
+    footer .firma { font-family: var(--serif); font-style: italic; font-size: 16px; color: var(--tinta); margin-bottom: 6px; }
+    footer .firma strong { font-style: normal; font-weight: 900; }
   </style>
 </head>
 <body>
@@ -153,7 +158,10 @@
 
     <div id="secciones"></div>
 
-    <footer>Toca una cabecera para leer · Hecho con ❤️ en GitHub</footer>
+    <footer>
+      <div class="firma">Desarrollado por <strong>Adrián Lobato</strong></div>
+      <div>Toca una cabecera para leer</div>
+    </footer>
   </main>
 
   <script>
