@@ -5,136 +5,206 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <title>Mi Kiosko</title>
   <meta name="description" content="Mis periódicos favoritos en un solo sitio.">
-  <meta name="theme-color" content="#1f2937">
+  <meta name="theme-color" content="#f6f2ea" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#0f1115" media="(prefers-color-scheme: dark)">
   <link rel="manifest" href="manifest.json">
   <link rel="icon" href="icono.svg" type="image/svg+xml">
   <link rel="apple-touch-icon" href="icono-192.png">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-title" content="Kiosko">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=Inter:wght@400;600;800;900&display=swap" rel="stylesheet">
   <style>
     :root {
-      --fondo: #f4f1ea;
-      --texto: #1f2937;
-      --suave: #6b7280;
-      --tarjeta: #ffffff;
-      --sombra: 0 2px 10px rgba(0,0,0,.08);
+      --papel: #f6f2ea;
+      --tinta: #16130f;
+      --tinta-suave: #6f675c;
+      --raya: #d9d1c3;
+      --serif: "Playfair Display", Georgia, "Times New Roman", serif;
+      --sans: Inter, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
     }
     @media (prefers-color-scheme: dark) {
       :root {
-        --fondo: #111418;
-        --texto: #f3f4f6;
-        --suave: #9ca3af;
-        --tarjeta: #1c2128;
-        --sombra: 0 2px 10px rgba(0,0,0,.4);
+        --papel: #0f1115;
+        --tinta: #f1ede6;
+        --tinta-suave: #9a9488;
+        --raya: #2a2d33;
       }
     }
     * { box-sizing: border-box; }
+    html { -webkit-tap-highlight-color: transparent; }
     body {
       margin: 0;
-      font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
-      background: var(--fondo);
-      color: var(--texto);
-      padding: max(24px, env(safe-area-inset-top)) 16px 32px;
+      background: var(--papel);
+      color: var(--tinta);
+      font-family: var(--sans);
+      padding: max(20px, env(safe-area-inset-top)) 16px max(40px, env(safe-area-inset-bottom));
     }
-    main { max-width: 760px; margin: 0 auto; }
-    header { margin-bottom: 24px; }
-    h1 { font-size: 30px; margin: 0 0 4px; }
-    #fecha { color: var(--suave); margin: 0; font-size: 16px; }
-    #fecha::first-letter { text-transform: uppercase; }
+    main { max-width: 820px; margin: 0 auto; }
+
+    /* ---------- Cabecera tipo periódico ---------- */
+    .cabecera { text-align: center; padding-bottom: 6px; }
+    .cabecera .linea-sup {
+      display: flex; justify-content: space-between; gap: 12px;
+      font-size: 11px; font-weight: 600; letter-spacing: .14em; text-transform: uppercase;
+      color: var(--tinta-suave);
+      border-bottom: 1px solid var(--raya); padding-bottom: 10px;
+    }
+    .cabecera h1 {
+      font-family: var(--serif); font-weight: 900;
+      font-size: clamp(48px, 15vw, 96px); line-height: 1;
+      letter-spacing: -.02em; margin: 18px 0 14px;
+    }
+    .cabecera .doble-raya { border-top: 3px solid var(--tinta); border-bottom: 1px solid var(--tinta); height: 6px; }
+    #saludo {
+      font-family: var(--serif); font-style: italic; font-weight: 700;
+      font-size: 18px; color: var(--tinta-suave); margin: 14px 0 0;
+    }
+
+    /* ---------- Secciones ---------- */
+    section { margin-top: 34px; }
     h2 {
-      font-size: 13px; text-transform: uppercase; letter-spacing: .08em;
-      color: var(--suave); margin: 28px 0 12px;
+      display: flex; align-items: center; gap: 12px;
+      font-size: 12px; font-weight: 800; letter-spacing: .18em; text-transform: uppercase;
+      margin: 0 0 14px;
     }
-    .rejilla {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-      gap: 12px;
+    h2::after { content: ""; flex: 1; height: 1px; background: var(--raya); }
+
+    .rejilla { display: grid; gap: 12px; grid-template-columns: repeat(2, 1fr); }
+    .rejilla.tres { grid-template-columns: repeat(3, 1fr); }
+    .rejilla.una { grid-template-columns: 1fr; }
+    @media (min-width: 640px) {
+      .rejilla:not(.una):not(.tres) { grid-template-columns: repeat(4, 1fr); }
+      .rejilla.tres .periodico { aspect-ratio: 16 / 9; }
     }
+
+    /* ---------- Tarjetas de periódico ---------- */
     .periodico {
+      position: relative; overflow: hidden;
       display: flex; flex-direction: column; justify-content: space-between;
-      min-height: 96px; padding: 14px 16px;
-      background: var(--tarjeta); color: var(--texto);
-      border-radius: 14px; box-shadow: var(--sombra);
-      border-left: 6px solid var(--color);
-      text-decoration: none;
-      transition: transform .1s ease;
+      aspect-ratio: 1 / 1; padding: 14px;
+      border-radius: 18px; text-decoration: none;
+      color: var(--texto-tarjeta, #fff);
+      background:
+        radial-gradient(120% 90% at 0% 0%, rgba(255,255,255,.18), transparent 55%),
+        var(--color);
+      box-shadow: 0 1px 2px rgba(0,0,0,.12), 0 8px 24px -10px var(--color);
+      transition: transform .18s ease, box-shadow .18s ease;
     }
-    .periodico:hover { transform: translateY(-2px); }
+    .rejilla.una .periodico { aspect-ratio: auto; min-height: 120px; }
+    .periodico:hover { transform: translateY(-3px); box-shadow: 0 2px 4px rgba(0,0,0,.12), 0 14px 30px -10px var(--color); }
     .periodico:active { transform: scale(.97); }
-    .periodico:focus-visible { outline: 3px solid var(--color); outline-offset: 2px; }
-    .nombre { font-family: Georgia, "Times New Roman", serif; font-size: 20px; font-weight: bold; }
-    .web { font-size: 13px; color: var(--suave); }
+    .periodico:focus-visible { outline: 3px solid var(--tinta); outline-offset: 3px; }
+
+    .periodico .flecha {
+      align-self: flex-end;
+      width: 28px; height: 28px; border-radius: 50%;
+      display: grid; place-items: center;
+      background: rgba(255,255,255,.18); font-size: 14px;
+      transition: transform .18s ease;
+    }
+    .periodico:hover .flecha { transform: rotate(45deg); }
+    .periodico .nombre { line-height: 1.02; overflow-wrap: anywhere; }
+    .periodico .web { font-size: 11px; font-weight: 600; opacity: .75; margin-top: 6px; letter-spacing: .02em; }
+
+    /* Estilos de letra para parecerse a cada cabecera */
+    .estilo-serif .nombre  { font-family: var(--serif); font-weight: 900; font-size: clamp(22px, 6.4vw, 30px); }
+    .estilo-italic .nombre { font-family: var(--serif); font-style: italic; font-weight: 700; font-size: clamp(22px, 6.4vw, 30px); }
+    .estilo-sans .nombre   { font-family: var(--sans); font-weight: 800; font-size: clamp(20px, 5.8vw, 28px); letter-spacing: -.02em; }
+    .estilo-deporte .nombre {
+      font-family: var(--sans); font-weight: 900; font-style: italic; text-transform: uppercase;
+      font-size: clamp(20px, 6vw, 30px); letter-spacing: -.03em;
+    }
+    .rejilla.tres .periodico { padding: 12px; border-radius: 16px; }
+    .rejilla.tres .nombre { overflow-wrap: normal; font-size: clamp(18px, 5.4vw, 30px); }
+    @media (prefers-color-scheme: dark) {
+      .periodico { box-shadow: inset 0 0 0 1px rgba(255,255,255,.08), 0 8px 24px -12px var(--color); }
+    }
+    .rejilla.tres .flecha { width: 24px; height: 24px; font-size: 12px; }
+
+    footer { margin-top: 40px; text-align: center; font-size: 12px; color: var(--tinta-suave); }
   </style>
 </head>
 <body>
   <main>
-    <header>
-      <h1 id="saludo">📰 Mi Kiosko</h1>
-      <p id="fecha"></p>
+    <header class="cabecera">
+      <div class="linea-sup"><span id="dia"></span><span id="fecha-corta"></span></div>
+      <h1>El Kiosko</h1>
+      <div class="doble-raya"></div>
+      <p id="saludo"></p>
     </header>
+
     <div id="secciones"></div>
+
+    <footer>Toca una cabecera para leer · Hecho con ❤️ en GitHub</footer>
   </main>
 
   <script>
     // ✏️ Para añadir o quitar periódicos, edita esta lista.
+    //    estilo: 'serif' | 'italic' | 'sans' | 'deporte'
+    //    columnas: 1, 2 o 3 (cuántas tarjetas por fila en el móvil)
     const secciones = [
       {
-        titulo: 'Actualidad',
+        titulo: 'Actualidad', columnas: 2,
         periodicos: [
-          { nombre: 'El País',     url: 'https://elpais.com',    color: '#1a1a1a' },
-          { nombre: 'El Mundo',    url: 'https://www.elmundo.es', color: '#0a5fa8' },
-          { nombre: 'elDiario.es', url: 'https://www.eldiario.es', color: '#0b6fb8' },
-          { nombre: 'La Marea',    url: 'https://www.lamarea.com', color: '#e2001a' },
+          { nombre: 'El País',     url: 'https://elpais.com',      color: '#111111', estilo: 'serif' },
+          { nombre: 'El Mundo',    url: 'https://www.elmundo.es',  color: '#1d4e89', estilo: 'italic' },
+          { nombre: 'elDiario.es', url: 'https://www.eldiario.es', color: '#0e7c86', estilo: 'sans' },
+          { nombre: 'La Marea',    url: 'https://www.lamarea.com', color: '#d7263d', estilo: 'serif' },
         ],
       },
       {
-        titulo: 'Cantabria',
+        titulo: 'Cantabria', columnas: 1,
         periodicos: [
-          { nombre: 'El Diario Montañés', url: 'https://www.eldiariomontanes.es', color: '#004a8f' },
+          { nombre: 'El Diario Montañés', url: 'https://www.eldiariomontanes.es', color: '#123a6b', estilo: 'serif' },
         ],
       },
       {
-        titulo: 'Deportes',
+        titulo: 'Deportes', columnas: 3,
         periodicos: [
-          { nombre: 'Marca', url: 'https://www.marca.com', color: '#e3001b' },
-          { nombre: 'AS',    url: 'https://as.com',        color: '#c8102e' },
-          { nombre: 'Sport', url: 'https://www.sport.es',  color: '#d4001a' },
+          { nombre: 'Marca', url: 'https://www.marca.com', color: '#e3001b', estilo: 'deporte' },
+          { nombre: 'AS',    url: 'https://as.com',        color: '#a50d23', estilo: 'deporte' },
+          { nombre: 'Sport', url: 'https://www.sport.es',  color: '#1f2a5c', estilo: 'deporte' },
         ],
       },
     ];
 
-    // Saludo según la hora y fecha de hoy
+    // Fecha y saludo
     const ahora = new Date();
-    const hora = ahora.getHours();
-    const saludo = hora < 13 ? '☀️ Buenos días' : hora < 21 ? '🌤️ Buenas tardes' : '🌙 Buenas noches';
-    document.getElementById('saludo').textContent = saludo;
-    document.getElementById('fecha').textContent =
-      ahora.toLocaleDateString('es-ES', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
+    const dia = ahora.toLocaleDateString('es-ES', { weekday: 'long' });
+    document.getElementById('dia').textContent = dia;
+    document.getElementById('fecha-corta').textContent =
+      ahora.toLocaleDateString('es-ES', { day: 'numeric', month: 'long', year: 'numeric' });
+    const h = ahora.getHours();
+    document.getElementById('saludo').textContent =
+      (h < 6 ? 'Buenas noches' : h < 13 ? 'Buenos días' : h < 21 ? 'Buenas tardes' : 'Buenas noches') +
+      ', ¿qué leemos hoy?';
 
-    // Pintar los periódicos
+    // Pintar las secciones
+    const columnas = { 1: 'una', 2: '', 3: 'tres' };
     const contenedor = document.getElementById('secciones');
-    for (const seccion of secciones) {
+    for (const s of secciones) {
+      const section = document.createElement('section');
       const h2 = document.createElement('h2');
-      h2.textContent = seccion.titulo;
+      h2.textContent = s.titulo;
       const rejilla = document.createElement('div');
-      rejilla.className = 'rejilla';
-      for (const p of seccion.periodicos) {
+      rejilla.className = ('rejilla ' + (columnas[s.columnas] || '')).trim();
+      for (const p of s.periodicos) {
         const a = document.createElement('a');
-        a.className = 'periodico';
+        a.className = 'periodico estilo-' + (p.estilo || 'serif');
         a.href = p.url;
         a.target = '_blank';
         a.rel = 'noopener';
         a.style.setProperty('--color', p.color);
-        const nombre = document.createElement('span');
-        nombre.className = 'nombre';
-        nombre.textContent = p.nombre;
-        const web = document.createElement('span');
-        web.className = 'web';
-        web.textContent = new URL(p.url).hostname.replace(/^www\./, '');
-        a.append(nombre, web);
+        a.setAttribute('aria-label', 'Abrir ' + p.nombre);
+        a.innerHTML = '<span class="flecha" aria-hidden="true">↗</span><div><div class="nombre"></div><div class="web"></div></div>';
+        a.querySelector('.nombre').textContent = p.nombre;
+        a.querySelector('.web').textContent = new URL(p.url).hostname.replace(/^www\./, '');
         rejilla.append(a);
       }
-      contenedor.append(h2, rejilla);
+      section.append(h2, rejilla);
+      contenedor.append(section);
     }
 
     // Permite instalar la web como app
