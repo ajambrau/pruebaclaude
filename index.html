@@ -97,8 +97,16 @@
     .periodico:active { transform: scale(.97); }
     .periodico:focus-visible { outline: 3px solid var(--tinta); outline-offset: 3px; }
 
+    .periodico .arriba { display: flex; justify-content: space-between; align-items: flex-start; }
+    .periodico .logo {
+      width: 52px; height: 52px; border-radius: 14px; overflow: hidden;
+      background: #fff; display: grid; place-items: center;
+      box-shadow: 0 2px 8px rgba(0,0,0,.25);
+    }
+    .periodico .logo img { width: 100%; height: 100%; object-fit: contain; display: block; }
+    .rejilla.tres .logo { width: 40px; height: 40px; border-radius: 11px; }
     .periodico .flecha {
-      align-self: flex-end;
+      margin-left: auto;
       width: 28px; height: 28px; border-radius: 50%;
       display: grid; place-items: center;
       background: rgba(255,255,255,.18); font-size: 14px;
@@ -148,24 +156,24 @@
       {
         titulo: 'Actualidad', columnas: 2,
         periodicos: [
-          { nombre: 'El País',     url: 'https://elpais.com',      color: '#111111', estilo: 'serif' },
-          { nombre: 'El Mundo',    url: 'https://www.elmundo.es',  color: '#1d4e89', estilo: 'italic' },
-          { nombre: 'elDiario.es', url: 'https://www.eldiario.es', color: '#0e7c86', estilo: 'sans' },
-          { nombre: 'La Marea',    url: 'https://www.lamarea.com', color: '#d7263d', estilo: 'serif' },
+          { nombre: 'El País',     url: 'https://elpais.com',      color: '#111111', estilo: 'serif',  logo: 'logos/elpais.png' },
+          { nombre: 'El Mundo',    url: 'https://www.elmundo.es',  color: '#1d4e89', estilo: 'italic', logo: 'logos/elmundo.png' },
+          { nombre: 'elDiario.es', url: 'https://www.eldiario.es', color: '#0e7c86', estilo: 'sans',   logo: 'logos/eldiario.png' },
+          { nombre: 'La Marea',    url: 'https://www.lamarea.com', color: '#2f7ea6', estilo: 'serif',  logo: 'logos/lamarea.jpg' },
         ],
       },
       {
         titulo: 'Cantabria', columnas: 1,
         periodicos: [
-          { nombre: 'El Diario Montañés', url: 'https://www.eldiariomontanes.es', color: '#123a6b', estilo: 'serif' },
+          { nombre: 'El Diario Montañés', url: 'https://www.eldiariomontanes.es', color: '#123a6b', estilo: 'serif', logo: 'logos/eldiariomontanes.png' },
         ],
       },
       {
         titulo: 'Deportes', columnas: 3,
         periodicos: [
-          { nombre: 'Marca', url: 'https://www.marca.com', color: '#e3001b', estilo: 'deporte' },
-          { nombre: 'AS',    url: 'https://as.com',        color: '#a50d23', estilo: 'deporte' },
-          { nombre: 'Sport', url: 'https://www.sport.es',  color: '#1f2a5c', estilo: 'deporte' },
+          { nombre: 'Marca', url: 'https://www.marca.com', color: '#e3001b', estilo: 'deporte', logo: 'logos/marca.png' },
+          { nombre: 'AS',    url: 'https://as.com',        color: '#a50d23', estilo: 'deporte', logo: 'logos/as.png' },
+          { nombre: 'Sport', url: 'https://www.sport.es',  color: '#1f2a5c', estilo: 'deporte', logo: 'logos/sport.png' },
         ],
       },
     ];
@@ -198,7 +206,9 @@
         a.rel = 'noopener';
         a.style.setProperty('--color', p.color);
         a.setAttribute('aria-label', 'Abrir ' + p.nombre);
-        a.innerHTML = '<span class="flecha" aria-hidden="true">↗</span><div><div class="nombre"></div><div class="web"></div></div>';
+        a.innerHTML = '<div class="arriba"><span class="logo"><img alt="" loading="lazy"></span><span class="flecha" aria-hidden="true">↗</span></div><div><div class="nombre"></div><div class="web"></div></div>';
+        if (p.logo) a.querySelector('.logo img').src = p.logo;
+        else a.querySelector('.logo').remove();
         a.querySelector('.nombre').textContent = p.nombre;
         a.querySelector('.web').textContent = new URL(p.url).hostname.replace(/^www\./, '');
         rejilla.append(a);
