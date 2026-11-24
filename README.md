@@ -1,5 +1,12 @@
-# pruebaclaude
+# pruebaclaude · Mi Kiosko 📰
 
-Mi primer repositorio de GitHub. 🎉
+Una app web para abrir mis periódicos favoritos desde un solo sitio.
 
-Aquí estoy aprendiendo cómo funcionan los repositorios, los commits, las ramas y los Pull Requests.
+👉 **https://ajambrau.github.io/pruebaclaude/**
+
+## Instalarla en el móvil
+- **Android (Chrome):** abre la web → menú ⋮ → **Instalar aplicación** / **Añadir a pantalla de inicio**.
+- **iPhone (Safari):** abre la web → botón Compartir → **Añadir a pantalla de inicio**.
+
+## Añadir o quitar periódicos
+Edita la lista `secciones` al principio del `<script>` en `index.html`.

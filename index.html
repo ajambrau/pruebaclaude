@@ -2,37 +2,144 @@
 <html lang="es">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Mi primera web</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Mi Kiosko</title>
+  <meta name="description" content="Mis periódicos favoritos en un solo sitio.">
+  <meta name="theme-color" content="#1f2937">
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" href="icono.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="icono-192.png">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="Kiosko">
   <style>
-    body { font-family: system-ui, sans-serif; background: #f4f1ea; color: #222;
-           display: grid; place-items: center; min-height: 100vh; margin: 0; padding: 16px; }
-    .tarjeta { background: #fff; padding: 32px; border-radius: 16px; text-align: center;
-               box-shadow: 0 4px 20px rgba(0,0,0,.08); max-width: 360px; }
-    button { font-size: 18px; padding: 10px 20px; border: 0; border-radius: 8px;
-             background: #2f6fde; color: #fff; cursor: pointer; }
-    body { transition: background .4s; }
-    #contador { font-size: 48px; margin: 16px 0; }
-    #mensaje { min-height: 1.5em; font-weight: bold; margin-top: 16px; }
+    :root {
+      --fondo: #f4f1ea;
+      --texto: #1f2937;
+      --suave: #6b7280;
+      --tarjeta: #ffffff;
+      --sombra: 0 2px 10px rgba(0,0,0,.08);
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --fondo: #111418;
+        --texto: #f3f4f6;
+        --suave: #9ca3af;
+        --tarjeta: #1c2128;
+        --sombra: 0 2px 10px rgba(0,0,0,.4);
+      }
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+      background: var(--fondo);
+      color: var(--texto);
+      padding: max(24px, env(safe-area-inset-top)) 16px 32px;
+    }
+    main { max-width: 760px; margin: 0 auto; }
+    header { margin-bottom: 24px; }
+    h1 { font-size: 30px; margin: 0 0 4px; }
+    #fecha { color: var(--suave); margin: 0; font-size: 16px; }
+    #fecha::first-letter { text-transform: uppercase; }
+    h2 {
+      font-size: 13px; text-transform: uppercase; letter-spacing: .08em;
+      color: var(--suave); margin: 28px 0 12px;
+    }
+    .rejilla {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+      gap: 12px;
+    }
+    .periodico {
+      display: flex; flex-direction: column; justify-content: space-between;
+      min-height: 96px; padding: 14px 16px;
+      background: var(--tarjeta); color: var(--texto);
+      border-radius: 14px; box-shadow: var(--sombra);
+      border-left: 6px solid var(--color);
+      text-decoration: none;
+      transition: transform .1s ease;
+    }
+    .periodico:hover { transform: translateY(-2px); }
+    .periodico:active { transform: scale(.97); }
+    .periodico:focus-visible { outline: 3px solid var(--color); outline-offset: 2px; }
+    .nombre { font-family: Georgia, "Times New Roman", serif; font-size: 20px; font-weight: bold; }
+    .web { font-size: 13px; color: var(--suave); }
   </style>
 </head>
 <body>
-  <div class="tarjeta">
-    <h1>¡Hola! 👋</h1>
-    <p>Esta es mi primera web, hecha en una rama y unida con un Pull Request.</p>
-    <div id="contador">0</div>
-    <button onclick="pulsar()">Púlsame</button>
-    <div id="mensaje"></div>
-  </div>
+  <main>
+    <header>
+      <h1 id="saludo">📰 Mi Kiosko</h1>
+      <p id="fecha"></p>
+    </header>
+    <div id="secciones"></div>
+  </main>
+
   <script>
-    const colores = ['#f4f1ea', '#ffe3e3', '#e3f2ff', '#e6ffe3', '#fff6d6', '#f0e3ff'];
-    let clics = 0;
-    function pulsar() {
-      clics++;
-      document.getElementById('contador').textContent = clics;
-      document.body.style.background = colores[clics % colores.length];
-      if (clics === 10) document.getElementById('mensaje').textContent = '🏆 ¡10 clics! ¡Eres un crack!';
-      if (clics === 50) document.getElementById('mensaje').textContent = '🚀 ¡50 clics! ¿No te cansas?';
+    // ✏️ Para añadir o quitar periódicos, edita esta lista.
+    const secciones = [
+      {
+        titulo: 'Actualidad',
+        periodicos: [
+          { nombre: 'El País',     url: 'https://elpais.com',    color: '#1a1a1a' },
+          { nombre: 'El Mundo',    url: 'https://www.elmundo.es', color: '#0a5fa8' },
+          { nombre: 'elDiario.es', url: 'https://www.eldiario.es', color: '#0b6fb8' },
+          { nombre: 'La Marea',    url: 'https://www.lamarea.com', color: '#e2001a' },
+        ],
+      },
+      {
+        titulo: 'Cantabria',
+        periodicos: [
+          { nombre: 'El Diario Montañés', url: 'https://www.eldiariomontanes.es', color: '#004a8f' },
+        ],
+      },
+      {
+        titulo: 'Deportes',
+        periodicos: [
+          { nombre: 'Marca', url: 'https://www.marca.com', color: '#e3001b' },
+          { nombre: 'AS',    url: 'https://as.com',        color: '#c8102e' },
+          { nombre: 'Sport', url: 'https://www.sport.es',  color: '#d4001a' },
+        ],
+      },
+    ];
+
+    // Saludo según la hora y fecha de hoy
+    const ahora = new Date();
+    const hora = ahora.getHours();
+    const saludo = hora < 13 ? '☀️ Buenos días' : hora < 21 ? '🌤️ Buenas tardes' : '🌙 Buenas noches';
+    document.getElementById('saludo').textContent = saludo;
+    document.getElementById('fecha').textContent =
+      ahora.toLocaleDateString('es-ES', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
+
+    // Pintar los periódicos
+    const contenedor = document.getElementById('secciones');
+    for (const seccion of secciones) {
+      const h2 = document.createElement('h2');
+      h2.textContent = seccion.titulo;
+      const rejilla = document.createElement('div');
+      rejilla.className = 'rejilla';
+      for (const p of seccion.periodicos) {
+        const a = document.createElement('a');
+        a.className = 'periodico';
+        a.href = p.url;
+        a.target = '_blank';
+        a.rel = 'noopener';
+        a.style.setProperty('--color', p.color);
+        const nombre = document.createElement('span');
+        nombre.className = 'nombre';
+        nombre.textContent = p.nombre;
+        const web = document.createElement('span');
+        web.className = 'web';
+        web.textContent = new URL(p.url).hostname.replace(/^www\./, '');
+        a.append(nombre, web);
+        rejilla.append(a);
+      }
+      contenedor.append(h2, rejilla);
+    }
+
+    // Permite instalar la web como app
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('sw.js').catch(() => {});
     }
   </script>
 </body>
